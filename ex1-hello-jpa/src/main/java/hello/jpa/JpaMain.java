@@ -16,21 +16,14 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 비영속
-            Member member = new Member();
-            member.setId(104L);
-            member.setName("NJ");
-
             // 영속
-            System.out.println("--- BEFORE ---");
-            em.persist(member);
-            System.out.println("--- AFTER ---");
+            Member member1 = new Member(150L, "A");
+            Member member2 = new Member(151L, "B");
 
-            // DB에 셀렉트 쿼리가 나가지 않는다. 영속성 컨텍스트의 1차 캐시에 저장되어 있기 때문에 캐시에서 바로 가져온다.
-            Member findMember = em.find(Member.class, 104L);
+            em.persist(member1);
+            em.persist(member2);
 
-            System.out.println("findMember.id = " + findMember.getId());
-            System.out.println("findMember.name = " + findMember.getName());
+            System.out.println("-----------------출력 이후에 쿼리가 나간다");
 
             tx.commit();
         } catch (Exception e) {
