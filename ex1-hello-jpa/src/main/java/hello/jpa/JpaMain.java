@@ -17,13 +17,12 @@ public class JpaMain {
 
         try {
             // 영속
-            Member member1 = new Member(150L, "A");
-            Member member2 = new Member(151L, "B");
+            Member member = new Member(200L, "A");
+            em.persist(member);
 
-            em.persist(member1);
-            em.persist(member2);
+            em.flush();
 
-            System.out.println("-----------------출력 이후에 쿼리가 나간다");
+            System.out.println("-----------------플러시 직접 호출하면 쿼리가 커밋 전 플러시 호출 시점에 나감");
 
             tx.commit();
         } catch (Exception e) {
