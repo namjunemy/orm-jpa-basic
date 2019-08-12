@@ -16,14 +16,7 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 영속
-            Member member = new Member(200L, "A");
-            em.persist(member);
-
-            em.flush();
-
-            System.out.println("-----------------플러시 직접 호출하면 쿼리가 커밋 전 플러시 호출 시점에 나감");
-
+            
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
