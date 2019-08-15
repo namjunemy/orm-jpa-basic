@@ -26,8 +26,9 @@ public class JpaMain {
             em.persist(member);
 
             // 연관관계 편의 메소드를 생성해서 양방향 매핑의 값 설정을 세트화 시키자.
-            member.setTeam(team);
-            
+            // 되도록이면 메소드 이름을 통해서 get, set 관례에 의한것이 아니라는 것을 분명히하자
+            member.changeTeam(team);
+
             Team findTeam = em.find(Team.class, team.getId());
             List<Member> findMembers = findTeam.getMembers();
 
