@@ -6,6 +6,7 @@
   <!-- 데이터베이스당 1개 작성 -->
   <persistence-unit name="hello">
     <class>hello.jpa.Member</class>
+    <class>hello.jpa.Team</class>
     <properties>
       <!-- 필수 속성 -->
       <!-- JPA 표준 -->
@@ -19,7 +20,7 @@
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
       <property name="hibernate.use_sql_comments" value="true"/>
-      <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
+      <property name="hibernate.hbm2ddl.auto" value="create" />
     </properties>
   </persistence-unit>
 </persistence>

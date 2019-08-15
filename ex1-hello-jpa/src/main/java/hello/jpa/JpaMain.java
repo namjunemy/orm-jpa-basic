@@ -4,9 +4,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
-
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
 
@@ -16,14 +16,30 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("NJ");
 
-            System.out.println("기본키 IDENTITY 전략에서는 DB에 들리지 않으면 ID를 알 수 없다.");
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("njkim");
+            member.setTeam(team);
             em.persist(member);
-            System.out.println(member.getId());
-            System.out.println("persist시에 바로 DB 쿼리 날려서 ID값을 가져온다.");
-            System.out.println("ID값을 가져올 때 select문으로 가져오지 않는다. jdbc api가 주는 insert문의 리턴 값 가져옴");
+
+            // 역방향 연관관계 설정을 하지 않아도 JPA는 지연로딩을 통해서 member가 실제로 사용되는 시점에
+            // SELECT 쿼리를 통해서 가져오기 때문에 문제는 없다.
+            //team.getMembers().add(member);
+
+            em.flush();
+            em.clear();
+
+            Team findTeam = em.find(Team.class, team.getId());
+            List<Member> findMembers = findTeam.getMembers();
+
+            for (Member m : findMembers) {
+                // 팀의 Members에 넣어주지 않았지만, 조회를 할 수 있음. 이것이 지연로딩
+                System.out.println(m.getUsername());
+            }
 
             tx.commit();
         } catch (Exception e) {
