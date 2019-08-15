@@ -23,13 +23,11 @@ public class JpaMain {
 
             Member member = new Member();
             member.setUsername("njkim");
-            member.setTeam(team);
             em.persist(member);
 
-            // 결론은 양방향 매핑일 경우 양쪽에 모두 값을 넣어주자.
-            team.getMembers().add(member);
-
-
+            // 연관관계 편의 메소드를 생성해서 양방향 매핑의 값 설정을 세트화 시키자.
+            member.setTeam(team);
+            
             Team findTeam = em.find(Team.class, team.getId());
             List<Member> findMembers = findTeam.getMembers();
 
