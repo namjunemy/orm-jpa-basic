@@ -26,18 +26,14 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
-            // 역방향 연관관계 설정을 하지 않아도 JPA는 지연로딩을 통해서 member가 실제로 사용되는 시점에
-            // SELECT 쿼리를 통해서 가져오기 때문에 문제는 없다.
-            //team.getMembers().add(member);
+            // 결론은 양방향 매핑일 경우 양쪽에 모두 값을 넣어주자.
+            team.getMembers().add(member);
 
-            em.flush();
-            em.clear();
 
             Team findTeam = em.find(Team.class, team.getId());
             List<Member> findMembers = findTeam.getMembers();
 
             for (Member m : findMembers) {
-                // 팀의 Members에 넣어주지 않았지만, 조회를 할 수 있음. 이것이 지연로딩
                 System.out.println(m.getUsername());
             }
 
