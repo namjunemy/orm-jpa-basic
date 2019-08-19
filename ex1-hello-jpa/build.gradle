@@ -11,6 +11,8 @@ repositories {
     mavenCentral()
 }
 
+sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+
 dependencies {
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.10.Final'
     compile group: 'com.h2database', name: 'h2', version: '1.4.197'

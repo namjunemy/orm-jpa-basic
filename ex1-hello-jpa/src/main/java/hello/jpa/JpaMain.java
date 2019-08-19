@@ -35,6 +35,7 @@ public class JpaMain {
             for (Member m : findMembers) {
                 System.out.println(m.getUsername());
             }
+            System.out.println("-------------------------");
 
             tx.commit();
         } catch (Exception e) {

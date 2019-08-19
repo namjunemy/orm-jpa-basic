@@ -5,10 +5,6 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
   <!-- 데이터베이스당 1개 작성 -->
   <persistence-unit name="hello">
-    <class>io.namjune.shop.domain.Item</class>
-    <class>io.namjune.shop.domain.Member</class>
-    <class>io.namjune.shop.domain.Order</class>
-    <class>io.namjune.shop.domain.OrderItem</class>
     <properties>
       <!-- 필수 속성 -->
       <!-- JPA 표준 -->
