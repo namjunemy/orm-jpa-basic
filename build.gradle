@@ -1,12 +1,14 @@
-plugins {
-    id 'java'
-}
+subprojects {
+    apply plugin: 'java'
 
-group 'io.namjune'
-version '1.0-SNAPSHOT'
+    group 'io.namjune'
+    version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+    sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+
+    sourceSets.main.output.resourcesDir = sourceSets.main.java.outputDir
 }
