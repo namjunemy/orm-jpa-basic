@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,7 +60,6 @@ public class Member {
     @JoinColumn(name = "locker_id")
     private Locker locker;
 
-    @ManyToMany
-    @JoinTable(name = "member_product")
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 }
