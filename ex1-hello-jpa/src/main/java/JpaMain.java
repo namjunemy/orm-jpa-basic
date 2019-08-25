@@ -1,9 +1,12 @@
 import advancedmapping.Item;
 import advancedmapping.Movie;
+import hello.jpa.Member;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 
 public class JpaMain {
 
@@ -17,18 +20,14 @@ public class JpaMain {
 
         try {
 
-            Movie movie = new Movie();
-            movie.setDirector("감독A");
-            movie.setActor("배우B");
-            movie.setName("분노의질주");
-            movie.setPrice(35000);
+            Member member = new Member();
+            member.setCreatedBy("creator");
+            member.setCreatedDate(LocalDateTime.now());
 
-            em.persist(movie);
+            em.persist(member);
 
             em.flush();
             em.clear();
-
-            em.find(Item.class, movie.getId());
 
             tx.commit();
         } catch (Exception e) {
