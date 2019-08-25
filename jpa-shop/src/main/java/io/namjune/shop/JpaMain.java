@@ -1,8 +1,6 @@
 package io.namjune.shop;
 
-import io.namjune.shop.domain.Member;
-import io.namjune.shop.domain.Order;
-import io.namjune.shop.domain.OrderItem;
+import io.namjune.shop.domain.Book;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,10 +18,11 @@ public class JpaMain {
 
         try {
 
-            Order order = new Order();
-            order.addOrderItem(new OrderItem());
+            Book book = new Book();
+            book.setName("자바 표준 ORM 프로그래밍");
+            book.setAuthor("김영한");
 
-            System.out.println("@@@@@@@@@@@@@@@@@@@");
+            em.persist(book);
 
             tx.commit();
         } catch (Exception e) {
