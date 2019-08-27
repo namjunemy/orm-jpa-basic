@@ -1,12 +1,9 @@
-import advancedmapping.Item;
-import advancedmapping.Movie;
 import hello.jpa.Member;
-
+import hello.jpa.Team;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.time.LocalDateTime;
 
 public class JpaMain {
 
@@ -20,19 +17,23 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("creator");
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
+            Member member = new Member();
+            member.setUsername("memberA");
             em.persist(member);
+
+            member.changeTeam(team);
 
             em.flush();
             em.clear();
 
-            Member findMember = em.getReference(Member.class, member.getId());
-            System.out.println("findMember = " + findMember.getClass());
-            System.out.println("findMember.id = " + findMember.getId());
-            System.out.println("findMember.username = " + findMember.getUsername());
+            Member findMember = em.find(Member.class, member.getId());
 
+            System.out.println(findMember.getTeam().getClass());
+            System.out.println("TEAM NAME : " + findMember.getTeam().getName());
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
