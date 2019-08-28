@@ -39,7 +39,7 @@ public class Member extends BaseEntity {
     @Lob
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private Team team;
 

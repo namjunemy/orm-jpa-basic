@@ -1,5 +1,6 @@
 import hello.jpa.Member;
 import hello.jpa.Team;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -17,23 +18,33 @@ public class JpaMain {
 
         try {
 
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Team team1 = new Team();
+            team1.setName("teamA");
+            em.persist(team1);
 
-            Member member = new Member();
-            member.setUsername("memberA");
-            em.persist(member);
+            Team team2 = new Team();
+            team2.setName("teamB");
+            em.persist(team2);
 
-            member.changeTeam(team);
+            Member member1 = new Member();
+            member1.setUsername("memberA");
+            em.persist(member1);
+            member1.changeTeam(team1);
+
+            Member member2 = new Member();
+            member2.setUsername("memberB");
+            em.persist(member2);
+            member2.changeTeam(team2);
+
+
 
             em.flush();
             em.clear();
 
-            Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = em
+                .createQuery("select m from Member m", Member.class)
+                .getResultList();
 
-            System.out.println(findMember.getTeam().getClass());
-            System.out.println("TEAM NAME : " + findMember.getTeam().getName());
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
