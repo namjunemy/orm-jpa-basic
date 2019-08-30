@@ -1,9 +1,12 @@
 package hello.jpa;
 
 import common.BaseEntity;
+import hello.jpa.embedded.Address;
+import hello.jpa.embedded.Period;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -49,6 +52,12 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<MemberProduct> memberProducts = new ArrayList<>();
+
+    @Embedded
+    private Period workPeriod;
+
+    @Embedded
+    private Address homeAddress;
 
     public void changeTeam(Team team) {
         this.team = team;
