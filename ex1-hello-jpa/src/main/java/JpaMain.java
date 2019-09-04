@@ -2,6 +2,8 @@ import cascade.Child;
 import cascade.Parent;
 import hello.jpa.Member;
 import hello.jpa.Team;
+import hello.jpa.embedded.Address;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,20 +22,19 @@ public class JpaMain {
 
         try {
 
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Address address = new Address("city", "street", "10000");
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
+            Member member = new Member();
+            member.setUsername("nj");
+            member.setHomeAddress(address);
+            em.persist(member);
 
-            em.persist(parent);
+            Member member2 = new Member();
+            member2.setUsername("kim");
+            member2.setHomeAddress(address);
+            em.persist(member2);
 
-            em.flush();
-            em.clear();
-
-            Parent findParent = em.find(Parent.class, parent.getId());
-            em.remove(findParent);
+            member.getHomeAddress().setCity("new city");
 
             tx.commit();
         } catch (Exception e) {
