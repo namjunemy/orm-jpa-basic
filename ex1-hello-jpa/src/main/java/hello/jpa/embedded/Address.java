@@ -1,16 +1,14 @@
 package hello.jpa.embedded;
 
-import javax.persistence.Embeddable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
-@NoArgsConstructor
 @Getter
-@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class Address {
 
@@ -18,3 +16,6 @@ public class Address {
     private String street;
     private String zipcode;
 }
+
+
+

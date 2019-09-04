@@ -29,12 +29,8 @@ public class JpaMain {
             member.setHomeAddress(address);
             em.persist(member);
 
-            Member member2 = new Member();
-            member2.setUsername("kim");
-            member2.setHomeAddress(address);
-            em.persist(member2);
-
-            member.getHomeAddress().setCity("new city");
+            Address newAddress = new Address("new City", address.getStreet(), address.getZipcode());
+            member.setHomeAddress(newAddress);
 
             tx.commit();
         } catch (Exception e) {
