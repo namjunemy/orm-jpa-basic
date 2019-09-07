@@ -1,3 +1,4 @@
+import hello.jpa.AddressEntity;
 import hello.jpa.Member;
 import hello.jpa.embedded.Address;
 
@@ -28,9 +29,9 @@ public class JpaMain {
             member.getFavoriteFoods().add("족발");
             member.getFavoriteFoods().add("피자");
 
-            member.getAddressHistory().add(new Address("city1", "street1", "10001"));
-            member.getAddressHistory().add(new Address("city2", "street2", "10002"));
-            member.getAddressHistory().add(new Address("city3", "street3", "10003"));
+            member.getAddressHistory().add(new AddressEntity("city1", "street1", "10001"));
+            member.getAddressHistory().add(new AddressEntity("city2", "street2", "10002"));
+            member.getAddressHistory().add(new AddressEntity("city3", "street3", "10003"));
 
             em.persist(member);
 
@@ -39,15 +40,11 @@ public class JpaMain {
 
             System.out.println("================== START");
             Member findMember = em.find(Member.class, member.getId());
-            List<Address> addressHistory = findMember.getAddressHistory();
-            for (Address address : addressHistory) {
-                System.out.println("address = " + address.getCity());
-            }
+//
+//            findMember.getAddressHistory().remove(new AddressEntity("city1", "street1", "10001"));
+//            findMember.getAddressHistory().add(new AddressEntity("new city1", "street1", "10001"));
 
-            Set<String> favoriteFoods = findMember.getFavoriteFoods();
-            for (String favoriteFood : favoriteFoods) {
-                System.out.println("favoriteFood = " + favoriteFood);
-            }
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
