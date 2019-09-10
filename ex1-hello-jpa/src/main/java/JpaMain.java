@@ -1,13 +1,9 @@
-import hello.jpa.AddressEntity;
 import hello.jpa.Member;
-import hello.jpa.embedded.Address;
-
+import hello.jpa.Team;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
-import java.util.Set;
 
 public class JpaMain {
 
@@ -21,29 +17,31 @@ public class JpaMain {
 
         try {
 
+            Team team = new Team();
+            team.setName("Team A");
+            em.persist(team);
+
             Member member = new Member();
             member.setUsername("nj");
-            member.setHomeAddress(new Address("city", "street", "10000"));
-
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
-
-            member.getAddressHistory().add(new AddressEntity("city1", "street1", "10001"));
-            member.getAddressHistory().add(new AddressEntity("city2", "street2", "10002"));
-            member.getAddressHistory().add(new AddressEntity("city3", "street3", "10003"));
-
+            member.changeTeam(team);
             em.persist(member);
+
+            Member member2 = new Member();
+            member2.setUsername("nj2");
+            member2.changeTeam(team);
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
             System.out.println("================== START");
             Member findMember = em.find(Member.class, member.getId());
-//
-//            findMember.getAddressHistory().remove(new AddressEntity("city1", "street1", "10001"));
-//            findMember.getAddressHistory().add(new AddressEntity("new city1", "street1", "10001"));
+            Member findMember2 = em.find(Member.class, member2.getId());
 
+            System.out.println(findMember.getTeam().getClass());
+            System.out.println(findMember2.getTeam().getClass());
+
+            System.out.println(findMember.getTeam().equals(findMember2.getTeam()));
 
             tx.commit();
         } catch (Exception e) {
