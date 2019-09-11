@@ -38,10 +38,14 @@ public class JpaMain {
             Member findMember = em.find(Member.class, member.getId());
             Member findMember2 = em.find(Member.class, member2.getId());
 
-            System.out.println(findMember.getTeam().getClass());
-            System.out.println(findMember2.getTeam().getClass());
+            System.out.println("Member1 TEAM : " + findMember.getTeam().getClass());
+            System.out.println("Member2 TEAM : " + findMember2.getTeam().getClass());
 
-            System.out.println(findMember.getTeam().equals(findMember2.getTeam()));
+            // JPA는 동일 트랜잭션에서 같은 객체의 동일성을 보장함. 따라서 프록시 객체의 == 도 true
+            System.out.println("== : " + (findMember.getTeam().getClass() == findMember2.getTeam().getClass()));
+
+            // intellij에서 자동생성 해주는 equals, hashcode는 위의 JPA 매커니즘을 위배함
+            System.out.println("equals : " + findMember.getTeam().equals(findMember2.getTeam()));
 
             tx.commit();
         } catch (Exception e) {
