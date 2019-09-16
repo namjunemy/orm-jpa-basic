@@ -37,19 +37,16 @@ public class Team extends BaseEntity {
         if (this == o) {
             return true;
         }
-        // 프록시 객체에서 equals를 호출하는 순간 this 는 TEAM이 되고, o는 TEAM 프록시 객체 타입이 됨. 항상 false
-        // 대신 (!(o instanceof Team)) 으로 검증
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Team)) {
             return false;
         }
         Team team = (Team) o;
-        return Objects.equals(id, team.id) &&
-            Objects.equals(name, team.name) &&
-            Objects.equals(members, team.members);
+        return Objects.equals(getName(), team.getName()) &&
+            Objects.equals(getMembers(), team.getMembers());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, members);
+        return Objects.hash(getName(), getMembers());
     }
 }
