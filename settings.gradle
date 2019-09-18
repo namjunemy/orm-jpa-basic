@@ -1,4 +1,5 @@
 rootProject.name = 'orm-jpa-basic'
 include 'jpa-shop'
 include 'ex1-hello-jpa'
+include 'ex2-jpql'
 
