@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import jpql.domain.Member;
+import jpql.dto.MemberDTO;
 
 public class JpaMain {
 
@@ -27,14 +28,12 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            // 엔티티 프로젝션의 대상인 Member 리스트는 영속성 컨텍스트에서 관리 된다.
-            List<Member> members =
-                em.createQuery("select m from Member m", Member.class)
+            // 스칼라 타입 다수를 DTO로 바로 주입 받는 방법
+            List<MemberDTO> members =
+                em.createQuery("select new jpql.dto.MemberDTO(m.name, m.age) from Member m", MemberDTO.class)
                     .getResultList();
-
-            //update 쿼리 나간다.
-            Member findMember = members.get(0);
-            findMember.setAge(27);
+            System.out.println(members.get(0).getName());
+            System.out.println(members.get(0).getAge());
 
             tx.commit();
         } catch (Exception e) {
