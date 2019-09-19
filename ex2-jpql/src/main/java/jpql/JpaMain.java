@@ -6,7 +6,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import jpql.domain.Member;
-import jpql.dto.MemberDTO;
 
 public class JpaMain {
 
@@ -20,20 +19,25 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setName("nj1");
-            member.setAge(10);
-            em.persist(member);
+            for (int i = 0; i < 100; i++) {
+                Member member = new Member();
+                member.setName("nj" + i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
             em.flush();
             em.clear();
 
-            // 스칼라 타입 다수를 DTO로 바로 주입 받는 방법
-            List<MemberDTO> members =
-                em.createQuery("select new jpql.dto.MemberDTO(m.name, m.age) from Member m", MemberDTO.class)
-                    .getResultList();
-            System.out.println(members.get(0).getName());
-            System.out.println(members.get(0).getAge());
+            String jpql = "select m from Member m order by m.age desc";
+
+            List<Member> resultList = em.createQuery(jpql, Member.class)
+                .setFirstResult(1)
+                .setMaxResults(20)
+                .getResultList();
+
+            System.out.println(resultList.size());
+            resultList.forEach(System.out::println);
 
             tx.commit();
         } catch (Exception e) {
