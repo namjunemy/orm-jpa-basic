@@ -1,11 +1,10 @@
 package jpql;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import jpql.domain.Member;
 
 public class JpaMain {
@@ -25,12 +24,17 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            TypedQuery<Member> query =
-                em.createQuery("select m from Member m", Member.class);
-            TypedQuery<String> query2 =
-                em.createQuery("select m.name from Member m", String.class);
-            Query query3 =
-                em.createQuery("select m.name, m.age from Member m");
+            em.flush();
+            em.clear();
+
+            // 엔티티 프로젝션의 대상인 Member 리스트는 영속성 컨텍스트에서 관리 된다.
+            List<Member> members =
+                em.createQuery("select m from Member m", Member.class)
+                    .getResultList();
+
+            //update 쿼리 나간다.
+            Member findMember = members.get(0);
+            findMember.setAge(27);
 
             tx.commit();
         } catch (Exception e) {
