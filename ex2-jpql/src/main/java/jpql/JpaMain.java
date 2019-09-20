@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import jpql.domain.Member;
+import jpql.domain.Team;
 
 public class JpaMain {
 
@@ -18,26 +19,26 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-            for (int i = 0; i < 100; i++) {
-                Member member = new Member();
-                member.setName("nj" + i);
-                member.setAge(i);
-                em.persist(member);
-            }
+            Member member = new Member();
+            member.setName("nj");
+            member.setAge(27);
+            member.changeTeam(team);
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            String jpql = "select m from Member m order by m.age desc";
+            String inner = "select m from Member m inner join m.team t where t.name = :teamName";
+            String outer = "select m from Member m left join m.team t where t.name = :teamName";
+            String theta = "select count(m) from Member m, Team t where m.team t where m.name = t.name";
 
-            List<Member> resultList = em.createQuery(jpql, Member.class)
-                .setFirstResult(1)
-                .setMaxResults(20)
+            List<Member> resultList = em.createQuery(inner, Member.class)
+                .setParameter("teamName", team.getName())
                 .getResultList();
-
-            System.out.println(resultList.size());
-            resultList.forEach(System.out::println);
 
             tx.commit();
         } catch (Exception e) {
