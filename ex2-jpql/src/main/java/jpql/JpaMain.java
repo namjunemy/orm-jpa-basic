@@ -32,11 +32,17 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String inner = "select m from Member m inner join m.team t where t.name = :teamName";
-            String outer = "select m from Member m left join m.team t where t.name = :teamName";
-            String theta = "select count(m) from Member m, Team t where m.team t where m.name = t.name";
+            // 조인 대상 필터링
+            String filter = "select m "
+                + "from Member m "
+                + "left join m.team t on t.name = :teamName";
 
-            List<Member> resultList = em.createQuery(inner, Member.class)
+            // 연관관계 없는 엔티티 외부 조인
+            String thetaOuter = "select m,t "
+                + "from Member m "
+                + "left join Team t on m.name = t.name";
+
+            List<Member> resultList = em.createQuery(filter, Member.class)
                 .setParameter("teamName", team.getName())
                 .getResultList();
 
