@@ -1,6 +1,8 @@
 package jpql.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +22,9 @@ public class Member {
     private Long id;
     private String name;
     private int age;
+
+    @Enumerated(EnumType.STRING)
+    private MemberType memberType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")

@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import jpql.domain.Member;
+import jpql.domain.MemberType;
 import jpql.domain.Team;
 
 public class JpaMain {
@@ -26,25 +27,26 @@ public class JpaMain {
             Member member = new Member();
             member.setName("nj");
             member.setAge(27);
+            member.setMemberType(MemberType.ADMIN);
             member.changeTeam(team);
             em.persist(member);
 
             em.flush();
             em.clear();
 
-            // 조인 대상 필터링
-            String filter = "select m "
-                + "from Member m "
-                + "left join m.team t on t.name = :teamName";
+            // JPQL 타입 표현 : 문자열, boolean, ENUM
+            String query = "select m.name, 'HELLO', TRUE From Member m " +
+                "where m.memberType = :memberType";
 
-            // 연관관계 없는 엔티티 외부 조인
-            String thetaOuter = "select m,t "
-                + "from Member m "
-                + "left join Team t on m.name = t.name";
-
-            List<Member> resultList = em.createQuery(filter, Member.class)
-                .setParameter("teamName", team.getName())
+            List<Object[]> resultList = em.createQuery(query)
+                .setParameter("memberType", MemberType.ADMIN)
                 .getResultList();
+
+            for(Object[] objects : resultList) {
+                System.out.println(objects[0]);
+                System.out.println(objects[1]);
+                System.out.println(objects[2]);
+            }
 
             tx.commit();
         } catch (Exception e) {
