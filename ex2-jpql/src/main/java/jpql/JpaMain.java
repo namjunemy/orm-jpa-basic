@@ -36,10 +36,7 @@ public class JpaMain {
             em.clear();
 
             String query =
-                "select coalesce(m.name, '이름 없는 회원') from Member m";
-
-            String query2 =
-                "select nullif(m.name, '관리자') from Member m";
+                "select function('group_concat', m.name) from Member m";
 
             List<String> result = em.createQuery(query, String.class)
                 .getResultList();
