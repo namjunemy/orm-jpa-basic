@@ -1,13 +1,14 @@
 package jpql;
 
-import java.util.List;
+import jpql.domain.Member;
+import jpql.domain.MemberType;
+import jpql.domain.Team;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import jpql.domain.Member;
-import jpql.domain.MemberType;
-import jpql.domain.Team;
+import java.util.List;
 
 public class JpaMain {
 
@@ -25,7 +26,7 @@ public class JpaMain {
             em.persist(team);
 
             Member member = new Member();
-            member.setName("nj");
+            member.setName("관리자1");
             member.setAge(27);
             member.setMemberType(MemberType.ADMIN);
             member.changeTeam(team);
@@ -34,19 +35,16 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            // JPQL 타입 표현 : 문자열, boolean, ENUM
-            String query = "select m.name, 'HELLO', TRUE From Member m " +
-                "where m.memberType = :memberType";
+            String query =
+                "select coalesce(m.name, '이름 없는 회원') from Member m";
 
-            List<Object[]> resultList = em.createQuery(query)
-                .setParameter("memberType", MemberType.ADMIN)
+            String query2 =
+                "select nullif(m.name, '관리자') from Member m";
+
+            List<String> result = em.createQuery(query, String.class)
                 .getResultList();
 
-            for(Object[] objects : resultList) {
-                System.out.println(objects[0]);
-                System.out.println(objects[1]);
-                System.out.println(objects[2]);
-            }
+            System.out.println(result);
 
             tx.commit();
         } catch (Exception e) {
