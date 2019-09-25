@@ -1,14 +1,12 @@
 package jpql;
 
 import jpql.domain.Member;
-import jpql.domain.MemberType;
 import jpql.domain.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -47,12 +45,18 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select m from Member m join fetch m.team";
+            String query = "select t from Team t join fetch t.members";
 
-            List<Member> result = em.createQuery(query, Member.class)
+            List<Team> result = em.createQuery(query, Team.class)
                 .getResultList();
 
-            result.forEach(m -> System.out.println(m.getName() + ":" + m.getTeam().getName()));
+            for (Team t : result) {
+                System.out.println(t.getName() + ":" + t.getMembers().size());
+                for (Member m : t.getMembers()) {
+                    System.out.println("--> " + t.getName() + ":" + m.getName());
+                }
+            }
+
 
             tx.commit();
         } catch (Exception e) {
