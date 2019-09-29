@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class JpaMain {
 
@@ -30,31 +29,34 @@ public class JpaMain {
 
             Member member = new Member();
             member.setName("회원1");
+            member.setAge(0);
             member.changeTeam(teamA);
             Member member2 = new Member();
             member2.setName("회원2");
+            member2.setAge(0);
             member2.changeTeam(teamA);
             Member member3 = new Member();
             member3.setName("회원3");
+            member3.setAge(0);
             member3.changeTeam(teamB);
 
             em.persist(member);
             em.persist(member2);
             em.persist(member3);
 
-            em.flush();
-            em.clear();
+            String query = "update Member m set m.age = 20";
 
-            String query = "select t from Team t join fetch t.members";
+            //이 시점에 FLUSH 자동 호출. insert, update 나간다. DB에 SQL이 나가므로 flush 자동.
+            int resultCount = em.createQuery(query)
+                .executeUpdate();
+            
+            System.out.println(resultCount);
 
-            List<Member> result = em.createNamedQuery("Member.findByUsername", Member.class)
-                .setParameter("name", "회원1")
-                .getResultList();
-
-            for (Member m : result) {
-                System.out.println(m.getName());
-            }
-
+            // flush 는 DB에만 반영하지 영속성 컨텍스트를 비우지 않는다.
+            // 따라서,  벌크 연산이 나가고 영속성 컨텍스트 에는 아직도 member의 age가 0이다.
+//            em.clear();
+            Member resultMember = em.find(Member.class, member.getId());
+            System.out.println(resultMember.getAge());
 
             tx.commit();
         } catch (Exception e) {
